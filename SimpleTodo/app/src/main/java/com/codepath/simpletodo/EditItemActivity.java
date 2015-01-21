@@ -21,20 +21,24 @@ public class EditItemActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
-        String editItem = getIntent().getStringExtra("item");
+        Task editItem = (Task)getIntent().getSerializableExtra("item");
         originalPos = getIntent().getIntExtra("originalPos", -1);
         TextView tvItem = (TextView) findViewById(R.id.mltEditText);
-        tvItem.setText(editItem);
+        TextView tvDueDate = (TextView) findViewById(R.id.etDueDate);
+        tvItem.setText(editItem.getTitle());
+        tvDueDate.setText(editItem.getDueDate());
         tvItem.setSelectAllOnFocus(true);
     }
 
     public void onSaveItem(View v) {
         TextView tvItem = (TextView) findViewById(R.id.mltEditText);
         String saveText = tvItem.getText().toString();
+        TextView tvDueDate = (TextView) findViewById(R.id.etDueDate);
+        String saveDueDate = tvDueDate.getText().toString();
         // Prepare data intent
         Intent data = new Intent();
         // Pass relevant data back as a result
-        data.putExtra("saveItem", saveText);
+        data.putExtra("saveItem", new Task(saveText, saveDueDate));
         data.putExtra("originalPos", originalPos);
         // Activity finished ok, return the data
         setResult(RESULT_OK, data); // set result code and bundle data for response

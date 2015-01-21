@@ -4,5 +4,7 @@
     <string name="app_name">CodePath Simple ToDo App</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_edit_item">Edit Item</string>
+    <string name="rcNewItem">Enter your ToDo item</string>
+    <string name="rcAddItem">Add Item</string>
 
 </resources>

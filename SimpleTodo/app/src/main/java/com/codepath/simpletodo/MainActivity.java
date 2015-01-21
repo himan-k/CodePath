@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    ArrayList<Task> items;
+    TaskAdapter itemsAdapter;
     ListView lvItems;
     private final int REQUEST_CODE = 20;
 
@@ -32,8 +32,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         readItems();
-        itemsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new TaskAdapter(this, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
     }
@@ -61,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
                                                View item, int pos, long id) {
                     // first parameter is the context, second is the class of the activity to launch
                     Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                        i.putExtra("item", lvItems.getItemAtPosition(pos).toString());
+                        i.putExtra("item", (Task) lvItems.getItemAtPosition(pos));
                         i.putExtra("originalPos", pos);
                         startActivityForResult(i, REQUEST_CODE);
                     }
@@ -75,9 +74,9 @@ public class MainActivity extends ActionBarActivity {
         // REQUEST_CODE is defined above
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             // Extract name value from result extras
-            String saveItem = data.getExtras().getString("saveItem");
+            Task saveItem = (Task) data.getSerializableExtra("saveItem");
             int originalPos = data.getExtras().getInt("originalPos");
-            if(!saveItem.isEmpty()) {
+            if(null != saveItem) {
                 items.remove(originalPos);
                 itemsAdapter.insert(saveItem, originalPos);
             }
@@ -90,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir, "todo.txt");
         try {
-            items = new ArrayList<String>();
+            items = new ArrayList<>();
             FileUtils.writeLines(todoFile, items);
         } catch (IOException e) {
         }
@@ -108,9 +107,11 @@ public class MainActivity extends ActionBarActivity {
 
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
+        EditText etDueDate = (EditText) findViewById(R.id.etDueDate);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
+        itemsAdapter.add(new Task(etNewItem.getText().toString(), etDueDate.getText().toString()));
         etNewItem.setText("");
+        etDueDate.setText("");
         writeItems();
     }
 
