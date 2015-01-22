@@ -18,11 +18,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/etNewItem"
-        android:hint="@string/rcNewItem"
         android:inputType="textAutoComplete|textAutoCorrect|text|textMultiLine"
         android:layout_above="@+id/btnAddItem"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:drawableLeft="@drawable/ic_action_edit"
+        android:drawablePadding="5dp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -42,6 +43,8 @@
         android:id="@+id/etDueDate"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:drawableLeft="@drawable/ic_action_go_to_today"/>
 
 </RelativeLayout>
