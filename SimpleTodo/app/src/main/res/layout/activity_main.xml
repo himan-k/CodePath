@@ -33,7 +33,8 @@
         android:onClick="onAddItem"
         android:layout_alignTop="@+id/etDueDate"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:enabled="false" />
 
     <EditText
         android:layout_width="wrap_content"

@@ -89,7 +89,6 @@ public class MainActivity extends ActionBarActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                //sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 String reportDate = sdf.format(Calendar.getInstance().getTime());
                 reportDate = sdf.format(cal.getTime());
                 if (Calendar.getInstance().getTime().after(cal.getTime()) ) {
@@ -97,11 +96,13 @@ public class MainActivity extends ActionBarActivity {
                     etDueDate.setText(working.substring(0,6));
                     etDueDate.setSelection(6);
                 }
-            } else if (working.length()!=8) {
+            }
+
+            if (working.length()!=8) {
                 btnAddItem.setEnabled(false);
             }
 
-            if (!isValid && (working.length()==0 || working.length()==3 ||
+            if (!isValid && (working.length()==2 ||
                     working.length()==5 || working.length()==8)) {
                 etDueDate.setError("Enter a valid date: MM/DD/YY");
 
@@ -128,9 +129,10 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter,
                                                    View item, int pos, long id) {
+                        db.deleteTask(items.get(pos));
                         items.remove(pos);
                         itemsAdapter.notifyDataSetChanged();
-                        writeItems();
+
                         return true;
                     }
                 }
@@ -161,11 +163,10 @@ public class MainActivity extends ActionBarActivity {
             Task saveItem = (Task) data.getSerializableExtra("saveItem");
             int originalPos = data.getExtras().getInt("originalPos");
             if(null != saveItem) {
-                items.remove(originalPos);
-                itemsAdapter.insert(saveItem, originalPos);
+                db.updateTask(saveItem);
+                items.set(originalPos, saveItem);
             }
             itemsAdapter.notifyDataSetChanged();
-            writeItems();
         }
     }
 
@@ -173,18 +174,20 @@ public class MainActivity extends ActionBarActivity {
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir, "todo.txt");
         try {
-            items = new ArrayList<>();
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
+            //items = new ArrayList<>();
+            //FileUtils.writeLines(todoFile, items);
+            items = db.getAllTasks();
+        } catch (Exception e) {
         }
     }
 
-    private void writeItems() {
+    private void writeItem(Task task) {
         File fileDir = getFilesDir();
         File todoFile = new File(fileDir, "todo.txt");
         try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
+            //FileUtils.writeLines(todoFile, items);
+            db.addTask(task);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -193,10 +196,12 @@ public class MainActivity extends ActionBarActivity {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         EditText etDueDate = (EditText) findViewById(R.id.etDueDate);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(new Task(etNewItem.getText().toString(), etDueDate.getText().toString()));
+        Task newTask = new Task(etNewItem.getText().toString(), etDueDate.getText().toString());
+        items.add(newTask);
+        itemsAdapter.notifyDataSetChanged();
         etNewItem.setText("");
         etDueDate.setText("");
-        writeItems();
+        writeItem(newTask);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -89,8 +89,8 @@ public class TodoTaskDatabase extends SQLiteOpenHelper {
         return task;
     }
 
-    public List<Task> getAllTasks() {
-        List<Task> todoItems = new ArrayList<Task>();
+    public ArrayList<Task> getAllTasks() {
+        ArrayList<Task> todoItems = new ArrayList<Task>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_TODO;
 
