@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/mainRL"
+    style="@style/page_background_wh">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:id="@+id/innerRL">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivProfilePhoto"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:minHeight="40dp"
+            android:minWidth="40dp"
+            android:maxHeight="40dp"
+            android:maxWidth="40dp"
+            android:paddingLeft="9dp"
+            android:paddingTop="9dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true" />
+        <TextView
+            style="@style/username_text_bold"
+            android:id="@+id/tvUsername"
+            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAlignment="gravity"
+            android:width="200dp"
+            android:layout_toRightOf="@id/ivProfilePhoto"
+            android:paddingLeft="10dp"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content" />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:id="@+id/timestampRL">
+        <TextView
+            style="@style/timestamp_text"
+            android:id="@+id/tvTimestamp"
+            android:drawableLeft="@drawable/ic_timestamp"
+            android:gravity="center_vertical|left"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAlignment="gravity"
+            android:width="75dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content" />
+            </RelativeLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivPhoto"
+        android:layout_below="@+id/innerRL"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:minHeight="50dp" />
+
+
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:paddingBottom="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPhoto"
+        >
+        <TextView
+            style="@style/username_text_bold"
+            android:id="@+id/tvLikes"
+            android:gravity="center_vertical|left"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAlignment="gravity"
+            android:width="200dp"
+            android:height="50dp"
+            android:drawableLeft="@drawable/ic_likes"
+            android:layout_height="50dp"
+            android:layout_width="200dp" />
+
+        <TextView
+        android:id="@+id/tvCaption"
+        style="@style/caption_text"
+        android:layout_below="@+id/tvLikes"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:focusableInTouchMode="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvComments"
+            style="@style/caption_text"
+            android:layout_below="@+id/tvCaption"
+            android:maxLines="20"
+            android:ellipsize="end"
+            android:focusableInTouchMode="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+</RelativeLayout>
