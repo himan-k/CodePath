@@ -1,27 +1,35 @@
 # CodePath
-CodePath Simple ToDo App
+Instagram client app 
 
-This is an Android demo application for creating and editing a simple TODO tasks. 
+This is an Android instagram client demo application. 
 
 Completed user stories:
 
-Required: successfully add and remove items
+User Stories implemented:
 
-Required: support persistent todo items
+Required: User can scroll through current popular photos from Instagram
 
-(Suggested) Persist the todo items into SQLite instead of a text file
+Required: For each photo displayed, user can see the following details:
+Graphic, Caption, Username
 
-(Suggested) Improve style of the todo items in the list using a custom adapter
+(Optional) relative timestamp, like count, user profile image
 
-(Suggested) Add support for completion due dates for todo items (and display within listview item)
+Implemented following advanced stories:
 
-Tweak the style improving the UI / UX, play with colors, images or backgrounds
-Notes:
+Advanced: Add pull-to-refresh for popular stream with SwipeRefreshLayout
 
-I spent a bit of time trying to customize the action bar with color themes/styles and the launcher icon, but to no avail! I am going to port this app to my phone to see if the emulator has issues.
+Advanced: Show latest comment for each photo (bonus: show last 2 comments) (UNFINISHED)
+
+Advanced: Display each photo with the same style and proportions as the real Instagram (see screens below)
+
+Advanced: Display each user profile image using a RoundedImageView
+
+Advanced: Improve the user interface through styling and coloring
+
+Extras: continuous scroll
 
 Walkthrough of all user stories:
 
-![Alt text](/todo.gif?raw=true "Video Walkthrough")
+![Alt text](/fotogram.gif?raw=true "Video Walkthrough")
 
 GIF created with LiceCap.
