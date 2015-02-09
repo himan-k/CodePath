@@ -24,6 +24,6 @@ Extras: continuous scroll
 
 Walkthrough of all user stories:
 
-![Alt text](/todo.gif?raw=true "Video Walkthrough")
+#####[Alt text](/todo.gif?raw=true "Video Walkthrough")
 
 GIF created with LiceCap.
