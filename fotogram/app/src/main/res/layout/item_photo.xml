@@ -1,116 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/mainRL"
-    style="@style/page_background_wh">
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    style="@style/page_background_wh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        android:id="@+id/innerRL">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/innerRL"
+        android:layout_width="match_parent"
+
+        android:layout_height="50dp">
+
         <ImageView
+            android:id="@+id/ivProfilePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivProfilePhoto"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:minHeight="40dp"
-            android:minWidth="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
             android:maxHeight="40dp"
             android:maxWidth="40dp"
+            android:minHeight="40dp"
+            android:minWidth="40dp"
             android:paddingLeft="9dp"
             android:paddingTop="9dp"
-            android:layout_centerInParent="true"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true" />
-        <TextView
-            style="@style/username_text_bold"
-            android:id="@+id/tvUsername"
-            android:gravity="center_vertical"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAlignment="gravity"
-            android:width="200dp"
-            android:layout_toRightOf="@id/ivProfilePhoto"
-            android:paddingLeft="10dp"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content" />
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:scaleType="centerInside" />
 
-            android:id="@+id/timestampRL">
         <TextView
-            style="@style/timestamp_text"
-            android:id="@+id/tvTimestamp"
-            android:drawableLeft="@drawable/ic_timestamp"
-            android:gravity="center_vertical|left"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAlignment="gravity"
-            android:width="75dp"
-            android:paddingRight="10dp"
-            android:layout_alignParentRight="true"
+            android:id="@+id/tvUsername"
+            style="@style/username_text_bold"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_width="wrap_content" />
-            </RelativeLayout>
+            android:layout_toRightOf="@id/ivProfilePhoto"
+            android:width="200dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textAlignment="gravity" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/timestampRL"
+            android:layout_width="match_parent"
+
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/tvTimestamp"
+                style="@style/timestamp_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:width="75dp"
+                android:drawableLeft="@drawable/ic_timestamp"
+                android:ellipsize="end"
+                android:gravity="center_vertical|left"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textAlignment="gravity" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/ivPhoto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ivPhoto"
-        android:layout_below="@+id/innerRL"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/innerRL"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:minHeight="50dp" />
-
+        android:minHeight="50dp"
+        android:scaleType="fitXY" />
 
 
     <RelativeLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:paddingBottom="20dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPhoto"
-        >
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
         <TextView
-            style="@style/username_text_bold"
             android:id="@+id/tvLikes"
-            android:gravity="center_vertical|left"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAlignment="gravity"
+            style="@style/username_text_bold"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:width="200dp"
             android:height="50dp"
             android:drawableLeft="@drawable/ic_likes"
-            android:layout_height="50dp"
-            android:layout_width="200dp" />
+            android:ellipsize="end"
+            android:gravity="center_vertical|left"
+            android:singleLine="true"
+            android:textAlignment="gravity" />
 
         <TextView
-        android:id="@+id/tvCaption"
-        style="@style/caption_text"
-        android:layout_below="@+id/tvLikes"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:focusableInTouchMode="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            android:id="@+id/tvCaption"
+            style="@style/caption_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLikes"
+            android:ellipsize="end"
+            android:focusableInTouchMode="false"
+            android:maxLines="3" />
 
         <TextView
             android:id="@+id/tvComments"
             style="@style/caption_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tvCaption"
-            android:maxLines="20"
             android:ellipsize="end"
             android:focusableInTouchMode="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:maxLines="20" />
 
-        </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>

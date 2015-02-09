@@ -5,13 +5,14 @@ package com.codepath.fotogram;
  */
 public class InstagramPhoto {
     protected String username;
-    protected String caption;
+    protected String caption = "";
     protected String imageUrl;
     protected int imageHeight;
     protected int likesCount;
-    protected String comments;
+    protected String comments = "";
     protected long timeStamp;
     protected String idMedia;
+    protected String profilePicture;
 
     public String getIdMedia() {
         return idMedia;
@@ -29,7 +30,6 @@ public class InstagramPhoto {
         this.comments = comments;
     }
 
-
     public long getTimeStamp() {
         return timeStamp;
     }
@@ -38,7 +38,6 @@ public class InstagramPhoto {
         this.timeStamp = timeStamp;
     }
 
-
     public String getProfilePicture() {
         return profilePicture;
     }
@@ -46,8 +45,6 @@ public class InstagramPhoto {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
-
-    protected String profilePicture;
 
     public String getUsername() {
         return username;

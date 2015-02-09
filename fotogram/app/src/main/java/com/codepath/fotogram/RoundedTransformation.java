@@ -3,16 +3,14 @@ package com.codepath.fotogram;
 /**
  * Created by Himanshu on 2/8/2015.
  */
+
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
-import android.graphics.Shader;
 
 // enables hardware accelerated rounded corners
 // original idea here : http://www.curious-creature.org/2012/12/11/android-recipe-1-image-with-rounded-corners/
@@ -70,7 +68,7 @@ public class RoundedTransformation implements com.squareup.picasso.Transformatio
         PorterDuff.Mode mMode = PorterDuff.Mode.DST_OVER;
         paint.setColorFilter(new PorterDuffColorFilter(Color.GREEN, mMode));
 
-        float r = size/2f;
+        float r = size / 2f;
         canvas.drawCircle(r, r, r, paint);
 
         squaredBitmap.recycle();

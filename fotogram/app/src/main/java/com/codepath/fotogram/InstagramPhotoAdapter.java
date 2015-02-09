@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,7 +31,7 @@ public class InstagramPhotoAdapter extends ArrayAdapter<InstagramPhoto> {
 
         InstagramPhoto photo = getItem(position);
 
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
         }
         TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
@@ -44,7 +43,7 @@ public class InstagramPhotoAdapter extends ArrayAdapter<InstagramPhoto> {
 
         // set the caption
         tvCaption.setText(photo.getUsername() + " " + photo.getCaption(), TextView.BufferType.SPANNABLE);
-        Spannable s = (Spannable)tvCaption.getText();
+        Spannable s = (Spannable) tvCaption.getText();
         int start = photo.getUsername().length();
         int end = start + photo.getCaption().length();
         s.setSpan(new ForegroundColorSpan(0xff406e95), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -53,7 +52,7 @@ public class InstagramPhotoAdapter extends ArrayAdapter<InstagramPhoto> {
         tvUsername.setText(photo.getUsername());
 
         // set timestamp
-        String[] strSplit = ((String)DateUtils.getRelativeTimeSpanString(photo.getTimeStamp() * 1000,
+        String[] strSplit = ((String) DateUtils.getRelativeTimeSpanString(photo.getTimeStamp() * 1000,
                 System.currentTimeMillis(),
                 DateUtils.FORMAT_ABBREV_ALL))
                 .split("\\s+");
@@ -65,7 +64,7 @@ public class InstagramPhotoAdapter extends ArrayAdapter<InstagramPhoto> {
         // set comments
         TextView tvComments = (TextView) convertView.findViewById(R.id.tvComments);
         tvComments.setText(Html.fromHtml(photo.getComments()), TextView.BufferType.SPANNABLE);
-        s = (Spannable)tvComments.getText();
+        s = (Spannable) tvComments.getText();
         //int start = photo.getUsername().length();
         //int end = start + photo.getCaption().length();
         //s.setSpan(new ForegroundColorSpan(0xff406e95), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

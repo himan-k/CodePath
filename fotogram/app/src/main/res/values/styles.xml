@@ -8,11 +8,13 @@
     <style name="page_background_wh">
         <item name="android:background">@drawable/white_background</item>
     </style>
+
     <style name="ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Large">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/titlebar_title_size</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="action_bar_fotogram" parent="android:Widget.Holo.ActionBar">
         <item name="android:background">@color/instagram_blue</item>
         <item name="android:titleTextStyle">@style/ActionBar.TitleTextStyle</item>
@@ -24,12 +26,14 @@
         <item name="android:icon">@android:color/transparent</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
+
     <style name="username_text_bold" parent="android:style/TextAppearance">
         <item name="android:textColor">@color/instagram_blue</item>
         <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:typeface">sans</item>
     </style>
+
     <style name="caption_text" parent="android:style/TextAppearance">
         <item name="android:textColor">@color/instagram_normal_text</item>
         <item name="android:textSize">13sp</item>

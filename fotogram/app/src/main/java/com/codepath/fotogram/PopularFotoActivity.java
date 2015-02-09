@@ -4,20 +4,16 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestHandle;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -26,13 +22,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PopularActivity extends Activity {
+public class PopularFotoActivity extends Activity {
     public final static String CLIENT_ID = "e8b4af12908d47979dc1dd2f90346ad4";
     public static String url = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
-    public static String commentsUrl ="https://api.instagram.com/v1/media//comments?client_id=" + CLIENT_ID;
+    public static String commentsUrl = "https://api.instagram.com/v1/media//comments?client_id=" + CLIENT_ID;
     private ArrayList<InstagramPhoto> photos;
     private InstagramPhotoAdapter aPhotos;
     private SwipeRefreshLayout swipeContainer;
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 
     @Override
@@ -90,7 +87,7 @@ public class PopularActivity extends Activity {
         });
     }
 
-    public void fetchPopularPhotos(final boolean addFront){
+    public void fetchPopularPhotos(final boolean addFront) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, null, new JsonHttpResponseHandler() {
@@ -104,17 +101,19 @@ public class PopularActivity extends Activity {
                         JSONObject photoJSON = photosJSON.getJSONObject(i);
                         InstagramPhoto photo = new InstagramPhoto();
                         photo.setUsername(photoJSON.getJSONObject("user").getString("username"));
-                        photo.setCaption(photoJSON.getJSONObject("caption").getString("text"));
+                        if (photoJSON.optJSONObject("caption") != null) {
+                            photo.setCaption(photoJSON.getJSONObject("caption").getString("text"));
+                            photo.setTimeStamp(photoJSON.getJSONObject("caption").getLong("created_time"));
+                        }
                         photo.setImageUrl(photoJSON.getJSONObject("images").
                                 getJSONObject("standard_resolution").getString("url"));
                         photo.setImageHeight(photoJSON.getJSONObject("images").
                                 getJSONObject("standard_resolution").getInt("height"));
                         photo.setLikesCount(photoJSON.getJSONObject("likes").getInt("count"));
                         photo.setProfilePicture(photoJSON.getJSONObject("user").getString("profile_picture"));
-                        photo.setTimeStamp(photoJSON.getJSONObject("caption").getLong("created_time"));
-                        photo.setIdMedia(photoJSON.getJSONObject("id").toString());
 
-                        if(addFront)
+                        photo.setIdMedia(photoJSON.getString("id"));
+                        if (addFront)
                             photos.add(0, photo);
                         else
                             photos.add(photo);
