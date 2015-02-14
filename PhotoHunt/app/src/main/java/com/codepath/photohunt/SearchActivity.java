@@ -24,9 +24,9 @@ import java.util.ArrayList;
 public class SearchActivity extends ActionBarActivity {
     private GridView gdResults;
     private static final String LOG_TAG = "JSONStreamReader";
-    private boolean success = false;
     private PhotoAdapter aPhotos;
     private ArrayList<Photo> photos = new ArrayList<Photo>();
+    private static String currentQuery = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +37,23 @@ public class SearchActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         // get gridview
-        GridView gridview = (GridView) findViewById(R.id.gvResults);
+        gdResults = (GridView) findViewById(R.id.gvResults);
 
         aPhotos = new PhotoAdapter(this, photos);
 
-        gridview.setAdapter(aPhotos);
+        gdResults.setAdapter(aPhotos);
         // find views in the application
         setupViews();
+
+        gdResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                fetchResults(currentQuery, false);
+                // or customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
     }
 
     private void setupViews() {
@@ -59,14 +69,13 @@ public class SearchActivity extends ActionBarActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                currentQuery = query;
                 // Fetch the data remotely
                 fetchResults(query, false);
                 // Reset SearchView
                 searchView.clearFocus();
-                //searchView.setQuery("", false);
+                searchView.setQuery(query, false);
                 searchView.setIconified(true);
-                // Set activity title to search query
-                //BookListActivity.this.setTitle(query);
                 return true;
             }
 
@@ -125,8 +134,8 @@ public class SearchActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_search:
                 SearchView search = (SearchView) MenuItemCompat.getActionView(item);
-                search.setQuery("Himanshu Kale", false);
-                Toast.makeText(this, "Selected: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                //search.setQuery("Himanshu Kale", false);
+                //Toast.makeText(this, "Selected: " + item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
