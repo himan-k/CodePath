@@ -34,6 +34,10 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     private PhotoAdapter aPhotos;
     private ArrayList<Photo> photos = new ArrayList<Photo>();
     private static String currentQuery = "";
+    private static color searchColor;
+    private static imageType searchImageType;
+    private static size searchSize;
+    private static String searchSite = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +47,21 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         setupViews(savedInstanceState);
         // Set a ToolBar to replace the ActionBar.
         setSupportActionBar(toolbar);
+
+        setListeners(gdResults);
         aPhotos = new PhotoAdapter(this, photos);
         gdResults.setAdapter(aPhotos);
 
+    }
+
+    private void setListeners(GridView gdResults) {
         gdResults.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                fetchResults(currentQuery, false);
+                if(totalItemsCount <= 56)
+                    fetchResults(currentQuery, totalItemsCount);
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
         });
@@ -77,6 +87,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
             searchFrag = SearchPreferencesFragment.newInstance("Himanshu", "kale");
         }
     }
+
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
 
@@ -101,12 +112,15 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
             @Override
             public boolean onQueryTextSubmit(String query) {
                 currentQuery = query;
+
+                // clear the list
+                photos.clear();
                 // Fetch the data remotely
-                fetchResults(query, false);
+                fetchResults(query, 0);
+
                 // Reset SearchView
+                searchView.setIconified(false);
                 searchView.clearFocus();
-                searchView.setQuery(query, false);
-                searchView.setIconified(true);
                 return true;
             }
 
@@ -118,7 +132,18 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         return true;
     }
 
-    private void fetchResults(String query, final boolean addFront) {
+    private void fetchResults(String query, final int startIndex) {
+        if(startIndex >= 0)
+            query += "&start=" + startIndex;
+        if(null != searchColor)
+            query += "&imgcolor=" + searchColor.toString();
+        if(null != searchImageType)
+            query += "&imgtype=" + searchImageType.toString();
+        if(null != searchSize)
+            query += "&imgsz=" + searchSize.toString();
+        if(!searchSite.isEmpty())
+            query += "&as_sitesearch=" + searchSize.toString();
+
         //URI to get the JSON stream data array of countries
         String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + query;
         AsyncHttpClient client = new AsyncHttpClient();
@@ -134,10 +159,8 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
                         Photo photo = new Photo();
 
                         photo.setImageUrl(photoJSON.getString("url"));
-                        if (addFront)
-                            photos.add(0, photo);
-                        else
-                            photos.add(photo);
+
+                        photos.add(photo);
                         //swipeContainer.setRefreshing(false);
                     }
                     //Log.i("DEBUG", response.toString());
@@ -176,7 +199,14 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
 
     @Override
     public void onFragmentInteraction(int sizeIndex, int colorIndex, int typeIndex, String website) {
+        searchSize = (sizeIndex > -1) ? size.values()[sizeIndex]: null;
+        searchColor = (colorIndex > -1) ? color.values()[colorIndex] : null;
+        searchImageType = (typeIndex > -1) ? imageType.values()[typeIndex] : null;
+        searchSite = website;
 
+        // assume this is new search, so clear and run query again
+        photos.clear();
+        fetchResults(currentQuery, 0);
     }
 }
 

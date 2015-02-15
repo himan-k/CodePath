@@ -3,7 +3,7 @@ package com.codepath.photohunt;
 public enum imageType {
     FACE(0), PHOTO(1), CLIPART(2), LINEART(3);
 
-    private final int index;
+    private int index = -1;
     imageType(int index) {
         this.index = index;
     }
