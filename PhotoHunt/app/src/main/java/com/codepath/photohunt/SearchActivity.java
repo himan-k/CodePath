@@ -1,7 +1,9 @@
 package com.codepath.photohunt;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -24,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends ActionBarActivity implements SearchPreferencesFragment.OnFragmentInteractionListener {
     private Toolbar toolbar;
     private GridView gdResults;
     private static final String LOG_TAG = "JSONStreamReader";
@@ -71,11 +73,24 @@ public class SearchActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        SearchPreferencesFragment searchPreferenceFrag = SearchPreferencesFragment.newInstance("Himanshu", "kale");
+        searchPreferenceFrag.show(fm, "fragment_edit_name");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        final MenuItem settingsItem = menu.findItem(R.id.action_settings);
+        settingsItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showEditDialog();
+                return false;
+            }
+        });
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -153,6 +168,11 @@ public class SearchActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
 
