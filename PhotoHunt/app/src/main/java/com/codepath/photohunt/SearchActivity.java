@@ -1,7 +1,6 @@
 package com.codepath.photohunt;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 public class SearchActivity extends ActionBarActivity implements SearchPreferencesFragment.OnFragmentInteractionListener {
     private Toolbar toolbar;
     private GridView gdResults;
+    private SearchPreferencesFragment searchFrag;
     private static final String LOG_TAG = "JSONStreamReader";
     private PhotoAdapter aPhotos;
     private ArrayList<Photo> photos = new ArrayList<Photo>();
@@ -40,7 +40,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         // find views in the application
-        setupViews();
+        setupViews(savedInstanceState);
         // Set a ToolBar to replace the ActionBar.
         setSupportActionBar(toolbar);
         aPhotos = new PhotoAdapter(this, photos);
@@ -68,18 +68,19 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         });
     }
 
-    private void setupViews() {
+    private void setupViews(Bundle savedInstanceState) {
         // get gridview
         gdResults = (GridView) findViewById(R.id.gvResults);
         // get toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (savedInstanceState == null) {
+            searchFrag = SearchPreferencesFragment.newInstance("Himanshu", "kale");
+        }
     }
-
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        SearchPreferencesFragment searchPreferenceFrag = SearchPreferencesFragment.newInstance("Himanshu", "kale");
 
-        searchPreferenceFrag.show(fm, "fragment_edit_name");
+        searchFrag.show(fm, "fragment_edit_name");
     }
 
     @Override
@@ -174,7 +175,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(int sizeIndex, int colorIndex, int typeIndex, String website) {
 
     }
 }

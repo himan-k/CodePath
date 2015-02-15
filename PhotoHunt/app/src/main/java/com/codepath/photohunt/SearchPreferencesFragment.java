@@ -2,12 +2,15 @@ package com.codepath.photohunt;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import at.markushi.ui.CircleButton;
+import info.hoang8f.android.segmented.SegmentedGroup;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +25,7 @@ public class SearchPreferencesFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static ViewHolder viewHolder = null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,15 +69,42 @@ public class SearchPreferencesFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         getDialog().setTitle("Search Preferences");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_preferences, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_preferences, container, false);
+        if(null == ((ViewHolder) view.getTag())){
+            viewHolder = new ViewHolder();
+            viewHolder.sgSize = (SegmentedGroup) view.findViewById(R.id.segmentedSize);
+            viewHolder.rgColor = (ToggleButtonGroupTableLayout) view.findViewById(R.id.rgColor);
+            viewHolder.sgType = (SegmentedGroup) view.findViewById(R.id.segmentedType);
+            viewHolder.website = (EditText) view.findViewById(R.id.etWebsite);
+            viewHolder.cbSave = (CircleButton) view.findViewById(R.id.cbSave);
+            viewHolder.cbClear = (CircleButton) view.findViewById(R.id.cbClear);
+
+            viewHolder.cbSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int size = viewHolder.sgSize.getCheckedRadioButtonId();
+                        int color = viewHolder.rgColor.getCheckedRadioButtonId();
+                        int type = viewHolder.sgType.getCheckedRadioButtonId();
+                        String website = viewHolder.website.getText().toString();
+                        mListener.onFragmentInteraction(size, color, type, website);
+                    }
+                }
+            });
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+        return view;
     }
 
+
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -104,7 +135,16 @@ public class SearchPreferencesFragment extends DialogFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(int sizeIndex, int colorIndex, int typeIndex, String website);
+    }
+
+    static class ViewHolder {
+        SegmentedGroup sgSize;
+        ToggleButtonGroupTableLayout rgColor;
+        SegmentedGroup sgType;
+        EditText website;
+        CircleButton cbSave;
+        CircleButton cbClear;
     }
 
 }

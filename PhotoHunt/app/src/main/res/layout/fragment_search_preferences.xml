@@ -20,49 +20,49 @@
         android:singleLine="true"
         android:textAlignment="gravity" />
 
-        <info.hoang8f.android.segmented.SegmentedGroup
-            android:id="@+id/segmented1"
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmentedSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/tvSize"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/bS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_below="@+id/tvSize"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal">
+            android:text="S"
+            style="@style/RadioButton" />
 
-            <RadioButton
-                android:id="@+id/bS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="S"
-                style="@style/RadioButton" />
+        <RadioButton
+            android:id="@+id/bM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            style="@style/RadioButton" />
+        <RadioButton
+            android:id="@+id/bL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="L"
+            style="@style/RadioButton" />
+        <RadioButton
+            android:id="@+id/bXL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XL"
+            style="@style/RadioButton" />
 
-            <RadioButton
-                android:id="@+id/bM"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="M"
-                style="@style/RadioButton" />
-            <RadioButton
-                android:id="@+id/bL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="L"
-                style="@style/RadioButton" />
-            <RadioButton
-                android:id="@+id/bXL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="XL"
-                style="@style/RadioButton" />
-
-        </info.hoang8f.android.segmented.SegmentedGroup>
+    </info.hoang8f.android.segmented.SegmentedGroup>
 
     <TextView
         android:id="@+id/tvColor"
         style="@style/label_text_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/segmented1"
+        android:layout_below="@+id/segmentedSize"
         android:width="200dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvColor"
         android:layout_centerHorizontal="true"
-        android:id="@+id/radGroup1">
+        android:id="@+id/rgColor">
         <TableRow>
             <RadioButton
                 android:id="@+id/bBlack"
@@ -191,7 +191,7 @@
         style="@style/label_text_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radGroup1"
+        android:layout_below="@+id/rgColor"
         android:width="200dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -202,7 +202,7 @@
         android:layout_marginTop="20dp"/>
 
     <info.hoang8f.android.segmented.SegmentedGroup
-        android:id="@+id/segmented2"
+        android:id="@+id/segmentedType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -243,7 +243,7 @@
         style="@style/label_text_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/segmented2"
+        android:layout_below="@+id/segmentedType"
         android:width="200dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -263,8 +263,33 @@
         android:width="200dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:text="Image Website:"
+        android:hint="Image Website"
         android:paddingLeft="10dp"
         android:singleLine="true"
         android:textAlignment="gravity" />
+
+    <at.markushi.ui.CircleButton
+        android:id="@+id/cbSave"
+        android:layout_width="64dip"
+        android:layout_height="64dip"
+        android:src="@drawable/ic_action_tick"
+        app:cb_color="#99CC00"
+        app:cb_pressedRingWidth="8dip"
+        android:layout_alignTop="@+id/cbClear"
+        android:layout_alignLeft="@+id/etWebsite"
+        android:layout_alignStart="@+id/etWebsite"
+        android:layout_marginLeft="20dp"/>
+
+    <at.markushi.ui.CircleButton
+        android:id="@+id/cbClear"
+        android:layout_width="64dip"
+        android:layout_height="64dip"
+        android:src="@drawable/ic_action_cross"
+        app:cb_color="#ffcc2d0e"
+        app:cb_pressedRingWidth="8dip"
+        android:layout_marginTop="46dp"
+        android:layout_below="@+id/etWebsite"
+        android:layout_toRightOf="@+id/tvWebsite"
+        android:layout_toEndOf="@+id/tvWebsite"
+        android:layout_marginRight="50dp"/>
 </RelativeLayout>
