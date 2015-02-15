@@ -1,5 +1,6 @@
 package com.codepath.photohunt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class SearchActivity extends ActionBarActivity {
+    private Toolbar toolbar;
     private GridView gdResults;
     private static final String LOG_TAG = "JSONStreamReader";
     private PhotoAdapter aPhotos;
@@ -31,19 +35,12 @@ public class SearchActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
-        // Set a ToolBar to replace the ActionBar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // get gridview
-        gdResults = (GridView) findViewById(R.id.gvResults);
-
-        aPhotos = new PhotoAdapter(this, photos);
-
-        gdResults.setAdapter(aPhotos);
         // find views in the application
         setupViews();
+        // Set a ToolBar to replace the ActionBar.
+        setSupportActionBar(toolbar);
+        aPhotos = new PhotoAdapter(this, photos);
+        gdResults.setAdapter(aPhotos);
 
         gdResults.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -54,9 +51,24 @@ public class SearchActivity extends ActionBarActivity {
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
         });
+
+        gdResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(SearchActivity.this, ImageViewActivity.class);
+
+                Photo photo = photos.get(position);
+                i.putExtra("url", photo.getImageUrl());
+                startActivity(i);
+            }
+        });
     }
 
     private void setupViews() {
+        // get gridview
+        gdResults = (GridView) findViewById(R.id.gvResults);
+        // get toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
 
