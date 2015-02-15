@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
 public class SearchActivity extends ActionBarActivity implements SearchPreferencesFragment.OnFragmentInteractionListener {
     private Toolbar toolbar;
     private GridView gdResults;
@@ -33,6 +34,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     private PhotoAdapter aPhotos;
     private ArrayList<Photo> photos = new ArrayList<Photo>();
     private static String currentQuery = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
         SearchPreferencesFragment searchPreferenceFrag = SearchPreferencesFragment.newInstance("Himanshu", "kale");
+
         searchPreferenceFrag.show(fm, "fragment_edit_name");
     }
 
