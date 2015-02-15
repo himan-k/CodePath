@@ -1,16 +1,13 @@
 package com.codepath.photohunt;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.DialogFragment;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +63,7 @@ public class SearchPreferencesFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getDialog().setTitle("Search Preferences");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_preferences, container, false);
     }
