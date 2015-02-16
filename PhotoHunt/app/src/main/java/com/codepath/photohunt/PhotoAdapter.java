@@ -43,8 +43,12 @@ public class PhotoAdapter extends ArrayAdapter<Photo>{
 
         ivPhoto.setImageResource(0);
         Picasso.with(getContext()).load(photo.getImageUrl())
+                .resize(800, 800).centerInside()
+                .placeholder(getContext().getResources()
+                        .getDrawable(R.drawable.user_placeholder))
+                .error(getContext().getResources()
+                        .getDrawable(R.drawable.user_placeholder))
                 .into(ivPhoto);
-
 
         return convertView;
     }

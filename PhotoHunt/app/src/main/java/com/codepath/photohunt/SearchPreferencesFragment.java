@@ -83,9 +83,22 @@ public class SearchPreferencesFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        int size = viewHolder.sgSize.getCheckedRadioButtonId();
-                        int color = viewHolder.rgColor.getCheckedRadioButtonId();
-                        int type = viewHolder.sgType.getCheckedRadioButtonId();
+                        int size = viewHolder.sgSize.indexOfChild(
+                                viewHolder.sgSize.findViewById(
+                                        viewHolder.sgSize.getCheckedRadioButtonId()
+                                )
+                        );
+
+                        int color = viewHolder.rgColor.indexOfChild(
+                                viewHolder.rgColor.findViewById(
+                                        viewHolder.rgColor.getCheckedRadioButtonId()
+                                )
+                        );
+                        int type = viewHolder.sgType.indexOfChild(
+                                viewHolder.sgType.findViewById(
+                                        viewHolder.sgType.getCheckedRadioButtonId()
+                                )
+                        );
                         String website = viewHolder.website.getText().toString();
                         mListener.onFragmentInteraction(size, color, type, website);
                     }
