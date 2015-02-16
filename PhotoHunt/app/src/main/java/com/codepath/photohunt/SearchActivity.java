@@ -97,11 +97,15 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         searchFrag.show(fm, "fragment_edit_name");
     }
 
+    private void hideEditDialog() {
+        searchFrag.dismiss();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        final MenuItem settingsItem = menu.findItem(R.id.action_settings);
+        final MenuItem settingsItem = menu.findItem(R.id.action_search_settings);
         settingsItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -188,9 +192,6 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
 
         switch (item.getItemId()) {
             case R.id.action_search:
-                SearchView search = (SearchView) MenuItemCompat.getActionView(item);
-                //search.setQuery("Himanshu Kale", false);
-                //Toast.makeText(this, "Selected: " + item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
@@ -206,8 +207,11 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         searchSite = website;
 
         // assume this is new search, so clear and run query again
-        photos.clear();
-        fetchResults(currentQuery, 0);
+        if(!currentQuery.isEmpty()) {
+            photos.clear();
+            fetchResults(currentQuery, 0);
+        }
+        hideEditDialog();
     }
 
     private Boolean isNetworkAvailable() {

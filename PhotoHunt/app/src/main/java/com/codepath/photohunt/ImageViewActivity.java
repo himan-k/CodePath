@@ -19,9 +19,11 @@ public class ImageViewActivity extends ActionBarActivity {
         String url = getIntent().getStringExtra("url");
         ImageView ivImage = (ImageView) findViewById(R.id.ivImage);
         Picasso.with(this).load(url)
-                .fit().centerCrop()
-        //transform(new RectangularTransformation(ivImage.getMaxWidth(), ivImage.getMaxWidth()))
-        .into(ivImage);
+                .transform(new RectangularTransformation(10, 20))
+                .skipMemoryCache()
+                .resize(1080, 1920)
+                .centerInside()
+                .into(ivImage);
     }
 
 

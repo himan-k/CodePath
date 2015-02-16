@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import at.markushi.ui.CircleButton;
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -54,7 +55,7 @@ public class SearchPreferencesFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         getDialog().setTitle("Search Preferences");
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_preferences, container, false);
+        final View view = inflater.inflate(R.layout.fragment_search_preferences, container, false);
         if(null == ((ViewHolder) view.getTag())){
             viewHolder = new ViewHolder();
             viewHolder.sgSize = (SegmentedGroup) view.findViewById(R.id.segmentedSize);
@@ -74,11 +75,11 @@ public class SearchPreferencesFragment extends DialogFragment {
                                 )
                         );
 
-                        int color = viewHolder.rgColor.indexOfChild(
-                                viewHolder.rgColor.findViewById(
-                                        viewHolder.rgColor.getCheckedRadioButtonId()
-                                )
-                        );
+                        RadioButton selectedBtn = (RadioButton)viewHolder.rgColor.findViewById(
+                                viewHolder.rgColor.getCheckedRadioButtonId());
+                        selectedBtn.setTextAppearance(view.getContext(), R.style.label_text_bold);
+                        selectedBtn.setAllCaps(true);
+                        int color = viewHolder.rgColor.indexOfChild(selectedBtn );
                         int type = viewHolder.sgType.indexOfChild(
                                 viewHolder.sgType.findViewById(
                                         viewHolder.sgType.getCheckedRadioButtonId()
@@ -87,6 +88,19 @@ public class SearchPreferencesFragment extends DialogFragment {
                         String website = viewHolder.website.getText().toString();
                         mListener.onFragmentInteraction(size, color, type, website);
                     }
+                }
+            });
+
+            viewHolder.cbClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewHolder.sgSize.clearCheck();
+                    viewHolder.sgType.clearCheck();
+                    RadioButton btn = (RadioButton)viewHolder.rgColor.findViewById(
+                            viewHolder.rgColor.getCheckedRadioButtonId()
+                        );
+                    btn.setChecked(false);
+                    viewHolder.website.setText("");
                 }
             });
             view.setTag(viewHolder);
