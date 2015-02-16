@@ -209,7 +209,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     @Override
     public void onFragmentInteraction(int sizeIndex, String color, int typeIndex, String website) {
         searchSize = (sizeIndex > -1) ? size.values()[sizeIndex]: null;
-        searchColor = (color.isEmpty()) ? null : color;
+        searchColor = color;
         searchImageType = (typeIndex > -1) ? imageType.values()[typeIndex] : null;
         searchSite = website;
 

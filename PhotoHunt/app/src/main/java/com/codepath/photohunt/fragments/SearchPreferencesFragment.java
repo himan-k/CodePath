@@ -77,17 +77,19 @@ public class SearchPreferencesFragment extends DialogFragment {
                                         viewHolder.sgSize.getCheckedRadioButtonId()
                                 )
                         );
-                        String color = ((RadioButton)viewHolder.rgColor.findViewById(
+                        RadioButton rdBtn = (RadioButton)viewHolder.rgColor.findViewById(
                                 viewHolder.rgColor.getCheckedRadioButtonId()
-                                )
-                        ).getText().toString();
+                                );
                         int type = viewHolder.sgType.indexOfChild(
                                 viewHolder.sgType.findViewById(
                                         viewHolder.sgType.getCheckedRadioButtonId()
                                 )
                         );
                         String website = viewHolder.website.getText().toString();
-                        mListener.onFragmentInteraction(size, color, type, website);
+                        mListener.onFragmentInteraction(size,
+                                (rdBtn == null)? null: rdBtn.getText().toString(),
+                                type,
+                                website);
                     }
                 }
             });
