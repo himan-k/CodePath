@@ -1,13 +1,13 @@
 package com.codepath.photohunt.activities;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.codepath.photohunt.R;
 import com.codepath.photohunt.helpers.RectangularTransformation;
+import com.codepath.photohunt.helpers.TouchImageView;
 import com.squareup.picasso.Picasso;
 
 
@@ -19,12 +19,13 @@ public class ImageViewActivity extends ActionBarActivity {
         setContentView(R.layout.activity_image_view);
 
         String url = getIntent().getStringExtra("url");
-        ImageView ivImage = (ImageView) findViewById(R.id.ivImage);
+        //ImageView ivImage = (ImageView) findViewById(R.id.ivImage);
+        TouchImageView ivImage = (TouchImageView) findViewById(R.id.ivImage);
         Picasso.with(this).load(url)
                 .transform(new RectangularTransformation(10, 20))
                 .skipMemoryCache()
                 .resize(1080, 1920)
-                .centerInside()
+                .centerCrop()
                 .into(ivImage);
     }
 
