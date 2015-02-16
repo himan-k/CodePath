@@ -62,13 +62,18 @@ public class InstagramPhotoAdapter extends ArrayAdapter<InstagramPhoto> {
         tvLikes.setText(photo.getLikesCount() + " likes");
 
         // set comments
-        TextView tvComments = (TextView) convertView.findViewById(R.id.tvComments);
-        tvComments.setText(Html.fromHtml(photo.getComments()), TextView.BufferType.SPANNABLE);
-        s = (Spannable) tvComments.getText();
-        //int start = photo.getUsername().length();
-        //int end = start + photo.getCaption().length();
-        //s.setSpan(new ForegroundColorSpan(0xff406e95), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if(null == photo.getComments()) {
+
+        }
+        if(null != photo.getComments()) {
+            TextView tvComments = (TextView) convertView.findViewById(R.id.tvComments);
+            tvComments.setText(Html.fromHtml(photo.getComments()), TextView.BufferType.SPANNABLE);
+            //s = (Spannable) tvComments.getText();
+            //start = photo.getUsername().length();
+            //end = start + photo.getCaption().length();
+            //s.setSpan(new ForegroundColorSpan(0xff406e95), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //s.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
 
         // set images
         ivProfilePhoto.setImageResource(0);
@@ -80,4 +85,45 @@ public class InstagramPhotoAdapter extends ArrayAdapter<InstagramPhoto> {
                 .into(ivPhoto);
         return convertView;
     }
+
+   /* public String fetchComments(InstagramPhoto photo) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        String finalUrl = new StringBuilder(commentsUrl).insert(34, photo.getIdMedia()).toString();
+        final String[] Comments = {null};
+        client.get(finalUrl, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray commentsJSON = null;
+                try {
+                    commentsJSON = response.getJSONArray("data");
+                    Log.i("DEBUG Json array length:", Integer.toString(commentsJSON.length()));
+
+                    for (int i = 0; i < commentsJSON.length(); i++) {
+                        JSONObject commentJSON = commentsJSON.getJSONObject(i);
+                        if(!commentJSON.isNull("from")){
+                            Comments[0] += "<b>" + commentJSON.getJSONObject("from").getString("username") + "</b>";
+                            Comments[0] += " " + commentJSON.getJSONObject("text").toString();
+                        }
+                        Comments[0] += "\n";
+
+                        if(commentsJSON.length() > 4 && i == 2) {
+                            Comments[0] += "view all " + commentsJSON.length() + " comments\n";
+                            i = commentsJSON.length() - 3;
+                        }
+                    }
+                    //Log.i("DEBUG", response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                aPhotos.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+        return Comments[0];
+    }*/
 }

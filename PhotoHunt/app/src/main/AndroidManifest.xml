@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SearchActivity"
+            android:name=".activities.SearchActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,12 +20,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ImageViewActivity"
+            android:name=".activities.ImageViewActivity"
             android:label="@string/title_activity_image_view"
-            android:parentActivityName=".SearchActivity" >
+            android:parentActivityName=".activities.SearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codepath.photohunt.SearchActivity" />
+                android:value=".activities.SearchActivity" />
         </activity>
     </application>
 

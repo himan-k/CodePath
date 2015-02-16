@@ -13,5 +13,5 @@
         android:orderInCategory="6"
         android:title="Settings"
         android:icon="@drawable/ic_action_settings_light"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="always" />
 </menu>

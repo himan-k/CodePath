@@ -29,6 +29,6 @@ The following advanced user stories are optional:
 
 Walkthrough of all user stories:
 
-![Alt text](/fotogram.gif?raw=true "Video Walkthrough")
+![Alt text](/photohunt.gif?raw=true "Video Walkthrough")
 
 GIF created with LiceCap.

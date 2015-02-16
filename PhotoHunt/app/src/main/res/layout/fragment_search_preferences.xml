@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codepath.photohunt.SearchPreferencesFragment">
+    tools:context="com.codepath.photohunt.fragments.SearchPreferencesFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -72,7 +72,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"/>
 
-    <com.codepath.photohunt.ToggleButtonGroupTableLayout
+    <com.codepath.photohunt.helpers.ToggleButtonGroupTableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                 style="@style/RadioButton" />
         </TableRow>
 
-    </com.codepath.photohunt.ToggleButtonGroupTableLayout>
+    </com.codepath.photohunt.helpers.ToggleButtonGroupTableLayout>
 
     <TextView
         android:id="@+id/tvType"

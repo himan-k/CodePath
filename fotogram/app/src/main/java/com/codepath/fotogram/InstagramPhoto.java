@@ -9,7 +9,7 @@ public class InstagramPhoto {
     protected String imageUrl;
     protected int imageHeight;
     protected int likesCount;
-    protected String comments = "";
+    protected String comments;
     protected long timeStamp;
     protected String idMedia;
     protected String profilePicture;
