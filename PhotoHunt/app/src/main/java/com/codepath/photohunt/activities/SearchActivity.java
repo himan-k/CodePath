@@ -130,6 +130,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
 
                 // clear the list
                 photos.clear();
+                aPhotos.notifyDataSetChanged();
                 // Fetch the data remotely
                 fetchResults(query, 0);
 
