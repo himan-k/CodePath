@@ -17,12 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.codepath.photohunt.R;
+import com.codepath.photohunt.adapters.PhotoAdapter;
+import com.codepath.photohunt.fragments.SearchPreferencesFragment;
 import com.codepath.photohunt.helpers.EndlessScrollListener;
 import com.codepath.photohunt.models.Photo;
-import com.codepath.photohunt.adapters.PhotoAdapter;
-import com.codepath.photohunt.R;
-import com.codepath.photohunt.fragments.SearchPreferencesFragment;
-import com.codepath.photohunt.models.color;
 import com.codepath.photohunt.models.imageType;
 import com.codepath.photohunt.models.size;
 import com.etsy.android.grid.StaggeredGridView;
@@ -41,11 +40,10 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     private Toolbar toolbar;
     private StaggeredGridView gdResultsStaggered;
     private SearchPreferencesFragment searchFrag;
-    private static final String LOG_TAG = "JSONStreamReader";
     private PhotoAdapter aPhotos;
-    private ArrayList<Photo> photos = new ArrayList<Photo>();
+    private ArrayList<Photo> photos = new ArrayList<>();
     private static String currentQuery = "";
-    private static color searchColor;
+    private static String searchColor;
     private static imageType searchImageType;
     private static size searchSize;
     private static String searchSite = "";
@@ -59,13 +57,13 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         // Set a ToolBar to replace the ActionBar.
         setSupportActionBar(toolbar);
 
-        setListeners(gdResultsStaggered);
+        setListeners();
         aPhotos = new PhotoAdapter(this, photos);
         gdResultsStaggered.setAdapter(aPhotos);
 
     }
 
-    private void setListeners(StaggeredGridView gdResults) {
+    private void setListeners() {
         gdResultsStaggered.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -153,12 +151,12 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
             Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
         if(startIndex >= 0)
             query += "&start=" + startIndex;
-        if(null != searchColor)
-            query += "&imgcolor=" + searchColor.toString();
+        if(null != searchColor && !searchColor.isEmpty())
+            query += "&imgcolor=" + searchColor.toLowerCase();
         if(null != searchImageType)
-            query += "&imgtype=" + searchImageType.toString();
+            query += "&imgtype=" + searchImageType.toString().toLowerCase();
         if(null != searchSize)
-            query += "&imgsz=" + searchSize.toString();
+            query += "&imgsz=" + searchSize.toString().toLowerCase();
         if(!searchSite.isEmpty())
             query += "&as_sitesearch=" + searchSite;
 
@@ -168,7 +166,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         client.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                JSONArray photosJSON = null;
+                JSONArray photosJSON;
                 try {
                     photosJSON = response.getJSONObject("responseData").getJSONArray("results");
                     Log.i("DEBUG Json array length:", Integer.toString(photosJSON.length()));
@@ -209,9 +207,9 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     }
 
     @Override
-    public void onFragmentInteraction(int sizeIndex, int colorIndex, int typeIndex, String website) {
+    public void onFragmentInteraction(int sizeIndex, String color, int typeIndex, String website) {
         searchSize = (sizeIndex > -1) ? size.values()[sizeIndex]: null;
-        searchColor = (colorIndex > -1) ? color.values()[colorIndex] : null;
+        searchColor = (color.isEmpty()) ? null : color;
         searchImageType = (typeIndex > -1) ? imageType.values()[typeIndex] : null;
         searchSite = website;
 

@@ -59,7 +59,7 @@ public class SearchPreferencesFragment extends DialogFragment {
         getDialog().setTitle("Search Preferences");
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_search_preferences, container, false);
-        if(null == ((ViewHolder) view.getTag())){
+        if(null == (view.getTag())){
             viewHolder = new ViewHolder();
             viewHolder.sgSize = (SegmentedGroup) view.findViewById(R.id.segmentedSize);
             viewHolder.rgColor = (ToggleButtonGroupTableLayout) view.findViewById(R.id.rgColor);
@@ -77,11 +77,10 @@ public class SearchPreferencesFragment extends DialogFragment {
                                         viewHolder.sgSize.getCheckedRadioButtonId()
                                 )
                         );
-                        int color = viewHolder.rgColor.indexOfChild(
-                                (RadioButton)viewHolder.rgColor.findViewById(
+                        String color = ((RadioButton)viewHolder.rgColor.findViewById(
                                 viewHolder.rgColor.getCheckedRadioButtonId()
                                 )
-                        );
+                        ).getText().toString();
                         int type = viewHolder.sgType.indexOfChild(
                                 viewHolder.sgType.findViewById(
                                         viewHolder.sgType.getCheckedRadioButtonId()
@@ -141,7 +140,7 @@ public class SearchPreferencesFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(int sizeIndex, int colorIndex, int typeIndex, String website);
+        public void onFragmentInteraction(int sizeIndex, String color, int typeIndex, String website);
     }
 
     static class ViewHolder {
