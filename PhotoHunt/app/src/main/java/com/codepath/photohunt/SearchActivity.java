@@ -1,6 +1,9 @@
 package com.codepath.photohunt;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -12,9 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.Toast;
 
+import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -28,7 +31,7 @@ import java.util.ArrayList;
 
 public class SearchActivity extends ActionBarActivity implements SearchPreferencesFragment.OnFragmentInteractionListener {
     private Toolbar toolbar;
-    private GridView gdResults;
+    private StaggeredGridView gdResultsStaggered;
     private SearchPreferencesFragment searchFrag;
     private static final String LOG_TAG = "JSONStreamReader";
     private PhotoAdapter aPhotos;
@@ -48,14 +51,14 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         // Set a ToolBar to replace the ActionBar.
         setSupportActionBar(toolbar);
 
-        setListeners(gdResults);
+        setListeners(gdResultsStaggered);
         aPhotos = new PhotoAdapter(this, photos);
-        gdResults.setAdapter(aPhotos);
+        gdResultsStaggered.setAdapter(aPhotos);
 
     }
 
-    private void setListeners(GridView gdResults) {
-        gdResults.setOnScrollListener(new EndlessScrollListener() {
+    private void setListeners(StaggeredGridView gdResults) {
+        gdResultsStaggered.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
@@ -66,7 +69,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
             }
         });
 
-        gdResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gdResultsStaggered.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(SearchActivity.this, ImageViewActivity.class);
@@ -79,12 +82,12 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     }
 
     private void setupViews(Bundle savedInstanceState) {
-        // get gridview
-        gdResults = (GridView) findViewById(R.id.gvResults);
+        // get GridView
+        gdResultsStaggered = (StaggeredGridView) findViewById(R.id.gvResultsStaggered);
         // get toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (savedInstanceState == null) {
-            searchFrag = SearchPreferencesFragment.newInstance("Himanshu", "kale");
+            searchFrag = SearchPreferencesFragment.newInstance();
         }
     }
 
@@ -133,6 +136,8 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
     }
 
     private void fetchResults(String query, final int startIndex) {
+        if(!isNetworkAvailable())
+            Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
         if(startIndex >= 0)
             query += "&start=" + startIndex;
         if(null != searchColor)
@@ -161,9 +166,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
                         photo.setImageUrl(photoJSON.getString("url"));
 
                         photos.add(photo);
-                        //swipeContainer.setRefreshing(false);
                     }
-                    //Log.i("DEBUG", response.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -183,8 +186,6 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        // Handle presses on the action bar items
-        Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.action_search:
                 SearchView search = (SearchView) MenuItemCompat.getActionView(item);
@@ -207,6 +208,13 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
         // assume this is new search, so clear and run query again
         photos.clear();
         fetchResults(currentQuery, 0);
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }
 
