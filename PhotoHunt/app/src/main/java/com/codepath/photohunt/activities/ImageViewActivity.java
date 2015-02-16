@@ -24,7 +24,7 @@ public class ImageViewActivity extends ActionBarActivity {
         Picasso.with(this).load(url)
                 .transform(new RectangularTransformation(10, 20))
                 .skipMemoryCache()
-                .resize(1080, 1920)
+                .resize(1080,1920)
                 .centerCrop()
                 .into(ivImage);
     }
