@@ -1,7 +1,6 @@
 package com.codepath.photohunt.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,7 +10,7 @@ import com.codepath.photohunt.helpers.TouchImageView;
 import com.squareup.picasso.Picasso;
 
 
-public class ImageViewActivity extends ActionBarActivity {
+public class ImageViewActivity extends SearchActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +18,6 @@ public class ImageViewActivity extends ActionBarActivity {
         setContentView(R.layout.activity_image_view);
 
         String url = getIntent().getStringExtra("url");
-        //ImageView ivImage = (ImageView) findViewById(R.id.ivImage);
         TouchImageView ivImage = (TouchImageView) findViewById(R.id.ivImage);
         Picasso.with(this).load(url)
                 .transform(new RectangularTransformation(10, 20))
@@ -33,8 +31,7 @@ public class ImageViewActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_image_view, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

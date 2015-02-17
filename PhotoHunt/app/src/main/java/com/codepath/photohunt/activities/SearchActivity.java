@@ -37,16 +37,16 @@ import java.util.ArrayList;
 
 
 public class SearchActivity extends ActionBarActivity implements SearchPreferencesFragment.OnFragmentInteractionListener {
-    private Toolbar toolbar;
-    private StaggeredGridView gdResultsStaggered;
-    private SearchPreferencesFragment searchFrag;
-    private PhotoAdapter aPhotos;
-    private ArrayList<Photo> photos = new ArrayList<>();
     private static String currentQuery = "";
     private static String searchColor;
     private static imageType searchImageType;
     private static size searchSize;
     private static String searchSite = "";
+    private Toolbar toolbar;
+    private StaggeredGridView gdResultsStaggered;
+    private SearchPreferencesFragment searchFrag;
+    private PhotoAdapter aPhotos;
+    private ArrayList<Photo> photos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +116,7 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 showEditDialog();
-                return false;
+                return true;
             }
         });
         final MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -143,6 +143,14 @@ public class SearchActivity extends ActionBarActivity implements SearchPreferenc
                 return false;
             }
         });
+        final MenuItem shareItem = menu.findItem(R.id.action_search_share);
+        shareItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+
         return true;
     }
 

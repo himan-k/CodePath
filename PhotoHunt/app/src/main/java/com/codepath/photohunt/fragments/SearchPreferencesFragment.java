@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.codepath.photohunt.R;
 import com.codepath.photohunt.helpers.ToggleButtonGroupTableLayout;
@@ -29,9 +30,14 @@ public class SearchPreferencesFragment extends DialogFragment {
 
     private OnFragmentInteractionListener mListener;
 
+    public SearchPreferencesFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment SearchPreferencesFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -40,10 +46,6 @@ public class SearchPreferencesFragment extends DialogFragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public SearchPreferencesFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -57,8 +59,13 @@ public class SearchPreferencesFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getDialog().setTitle("Search Preferences");
+        int textViewId = getDialog().getContext().getResources().getIdentifier("android:id/title", null, null);
+        TextView tv = (TextView) getDialog().findViewById(textViewId);
+        tv.setBackgroundColor(getResources().getColor(R.color.accent_toolbar_match_launch_icon));
+        tv.setTextColor(getResources().getColor(R.color.white));
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_search_preferences, container, false);
+
         if(null == (view.getTag())){
             viewHolder = new ViewHolder();
             viewHolder.sgSize = (SegmentedGroup) view.findViewById(R.id.segmentedSize);
