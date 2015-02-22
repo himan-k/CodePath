@@ -19,6 +19,17 @@
         android:maxLength="140"
         android:textColor="@color/CornflowerBlue" />
 
+    <TextView
+        android:id="@+id/tvCharRemaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tvUsername"
+        android:layout_margin="20dp"
+        android:paddingLeft="5dp"
+        android:text="3m"
+        android:textColor="#8899a6" />
+
     <info.hoang8f.widget.FButton
         android:id="@+id/f_twitter_button"
         android:layout_width="wrap_content"

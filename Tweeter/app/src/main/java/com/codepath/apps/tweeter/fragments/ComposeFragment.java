@@ -1,9 +1,11 @@
 package com.codepath.apps.tweeter.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,32 +13,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.codepath.apps.tweeter.R;
+import com.codepath.apps.tweeter.listeners.TweetComposedListener;
 
 import info.hoang8f.widget.FButton;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link com.codepath.apps.tweeter.fragments.ComposeFragment.OnComposedListener} interface
- * to handle interaction events.
- * Use the {@link ComposeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ComposeFragment extends DialogFragment {
+    private static final int TWEET_MAX_LENGTH = 140;
     private static ViewHolder viewHolder = null;
-    private OnComposedListener mListener;
+    private TweetComposedListener mListener;
 
     public ComposeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ComposeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ComposeFragment newInstance() {
         ComposeFragment fragment = new ComposeFragment();
         return fragment;
@@ -50,38 +39,83 @@ public class ComposeFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getDialog().setTitle("Compose Tweet");
-        int textViewId = getDialog().getContext().getResources().getIdentifier("android:id/title", null, null);
-        TextView tv = (TextView) getDialog().findViewById(textViewId);
-        tv.setBackgroundColor(getResources().getColor(R.color.CornflowerBlue));
-        tv.setTextColor(getResources().getColor(R.color.White));
+        SetupComposeFragHeader();
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_compose, container, false);
+
         if (null == (view.getTag())) {
-            viewHolder = new ViewHolder();
-            viewHolder.tweetBtn = (FButton) view.findViewById(R.id.f_twitter_button);
-            viewHolder.etBody = (EditText) view.findViewById(R.id.etBody);
-            viewHolder.tweetBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText tweet = (EditText) getDialog().findViewById(R.id.etBody);
-                    if (mListener != null && tweet.getText() != null) {
-                        mListener.onComposed(tweet.getText().toString());
-                    }
-                    tweet.setText("");
-                }
-            });
+            SetupViews(view);
+            SetupListeners();
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
         return view;
     }
 
+    private void SetupViews(View view) {
+        viewHolder = new ViewHolder();
+        viewHolder.tweetBtn = (FButton) view.findViewById(R.id.f_twitter_button);
+        viewHolder.etBody = (EditText) view.findViewById(R.id.etBody);
+        viewHolder.tvCharRemaining = (TextView) view.findViewById(R.id.tvCharRemaining);
+    }
+
+    private void SetupListeners() {
+        SetRemainingCharsListener();
+        SetPostTweetListener();
+    }
+
+    private void SetPostTweetListener() {
+        viewHolder.tweetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null && viewHolder.etBody.getText() != null) {
+                    mListener.onComposed(viewHolder.etBody.getText().toString());
+                }
+                viewHolder.etBody.setText("");
+                viewHolder.tvCharRemaining.setText(String.valueOf(TWEET_MAX_LENGTH));
+            }
+        });
+    }
+
+    private void SetRemainingCharsListener() {
+        viewHolder.etBody.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int count = TWEET_MAX_LENGTH - s.length();
+                viewHolder.tvCharRemaining.setText(String.valueOf(count));
+                if (count > 10) {
+                    viewHolder.tvCharRemaining.setTextColor(Color.GRAY);
+                } else if (count > 5) {
+                    viewHolder.tvCharRemaining.setTextColor(Color.rgb(240, 190, 40)); // orange
+                } else {
+                    viewHolder.tvCharRemaining.setTextColor(Color.RED);
+                }
+            }
+        });
+    }
+
+    private void SetupComposeFragHeader() {
+        getDialog().setTitle("Compose Tweet");
+        int textViewId = getDialog().getContext().getResources().getIdentifier("android:id/title", null, null);
+        TextView tv = (TextView) getDialog().findViewById(textViewId);
+        tv.setBackgroundColor(getResources().getColor(R.color.CornflowerBlue));
+        tv.setTextColor(getResources().getColor(R.color.White));
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnComposedListener) activity;
+            mListener = (TweetComposedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnComposedListener");
@@ -94,13 +128,10 @@ public class ComposeFragment extends DialogFragment {
         mListener = null;
     }
 
-    public interface OnComposedListener {
-        public void onComposed(String tweet);
-    }
-
     static class ViewHolder {
         FButton tweetBtn;
         EditText etBody;
+        TextView tvCharRemaining;
     }
 
 }

@@ -14,7 +14,8 @@ import com.codepath.apps.tweeter.TweeterApplication;
 import com.codepath.apps.tweeter.TweeterClient;
 import com.codepath.apps.tweeter.adapters.TweetListAdapter;
 import com.codepath.apps.tweeter.fragments.ComposeFragment;
-import com.codepath.apps.tweeter.helpers.EndlessScrollListener;
+import com.codepath.apps.tweeter.listeners.EndlessScrollListener;
+import com.codepath.apps.tweeter.listeners.TweetComposedListener;
 import com.codepath.apps.tweeter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -23,10 +24,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TimelineActivity extends ActionBarActivity implements ComposeFragment.OnComposedListener {
+public class TimelineActivity extends ActionBarActivity implements TweetComposedListener {
     private ListView lvTweets;
     private ArrayList<Tweet> tweets;
-    private TweeterClient client;
+    private TweeterClient client = TweeterApplication.getRestClient();
     private TweetListAdapter tweetsAdapter;
     private SwipeRefreshLayout swipeContainer;
     private Toolbar toolbar;
@@ -38,25 +39,19 @@ public class TimelineActivity extends ActionBarActivity implements ComposeFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
-        // get toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Set a ToolBar to replace the ActionBar.
-        setSupportActionBar(toolbar);
-        //initialize tweet list
-        tweets = new ArrayList<>();
-        tweetsAdapter = new TweetListAdapter(this, tweets);
+        SetupContentViews();
 
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
-        lvTweets.setAdapter(tweetsAdapter);
-
-        client = TweeterApplication.getRestClient();
         fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, null);
+
         if (savedInstanceState == null) {
             composeFragment = ComposeFragment.newInstance();
         }
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        SetupListeners();
 
+
+    }
+
+    private void SetupListeners() {
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -67,11 +62,6 @@ public class TimelineActivity extends ActionBarActivity implements ComposeFragme
                 fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, null);
             }
         });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
 
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -84,9 +74,34 @@ public class TimelineActivity extends ActionBarActivity implements ComposeFragme
         });
     }
 
+    private void SetupContentViews() {
+        setContentView(R.layout.activity_timeline);
+
+        // get toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Set a ToolBar to replace the ActionBar.
+        setSupportActionBar(toolbar);
+
+        // initialize tweet list
+        tweets = new ArrayList<>();
+
+        // Set list adapter
+        tweetsAdapter = new TweetListAdapter(this, tweets);
+        lvTweets = (ListView) findViewById(R.id.lvTweets);
+        lvTweets.setAdapter(tweetsAdapter);
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
     private void showEditDialog() {
         FragmentManager fm = getSupportFragmentManager();
-
         composeFragment.show(fm, "fragment_edit_name");
     }
 
@@ -111,16 +126,6 @@ public class TimelineActivity extends ActionBarActivity implements ComposeFragme
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
