@@ -5,21 +5,35 @@ package com.codepath.apps.tweeter.models;
  */
 
 import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
+@Table(name = "users")
 public class User extends Model implements Serializable {
 
+    @Column(name = "name")
     private String name;
+    @Column(name = "userId", unique = true)
     private long userId;
+    @Column(name = "screenName")
     private String screenName;
+    @Column(name = "profileImageUrl")
     private String profileImageUrl;
+    @Column(name = "tagLine")
     private String tagLine;
+    @Column(name = "numFollowers")
     private int numFollowers;
+    @Column(name = "numFollowing")
     private int numFollowing;
+
+    public User() {
+        super();
+    }
 
     public static User fromJson(JSONObject jsonObject) {
         User user = new User();
@@ -37,7 +51,7 @@ public class User extends Model implements Serializable {
         } catch (JSONException e) {
             return null;
         }
-
+        user.save();
         return user;
     }
 

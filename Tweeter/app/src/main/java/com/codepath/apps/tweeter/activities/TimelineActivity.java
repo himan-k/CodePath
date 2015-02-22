@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.apps.tweeter.R;
 import com.codepath.apps.tweeter.TweeterApplication;
@@ -23,6 +24,9 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.codepath.apps.tweeter.helpers.NetworkHelper.isNetworkAvailable;
+import static com.codepath.apps.tweeter.models.Tweet.getLatestCount;
 
 public class TimelineActivity extends ActionBarActivity implements TweetComposedListener {
     private ListView lvTweets;
@@ -84,7 +88,7 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
         setSupportActionBar(toolbar);
 
         // initialize tweet list
-        tweets = new ArrayList<>();
+        tweets = new ArrayList<Tweet>(getLatestCount("createdAt", 20));
 
         // Set list adapter
         tweetsAdapter = new TweetListAdapter(this, tweets);
@@ -98,15 +102,10 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-    }
 
-    private void showEditDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        composeFragment.show(fm, "fragment_edit_name");
-    }
-
-    private void hideEditDialog() {
-        composeFragment.dismiss();
+        if (!isNetworkAvailable(this)) {
+            Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -142,13 +141,17 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
 
         client.getStatuses(method, userId, oldestId, new JsonHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers,
+                                  String responseString,
+                                  Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
                 endLoading();
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, org.json.JSONArray response) {
+            public void onSuccess(int statusCode,
+                                  Header[] headers,
+                                  org.json.JSONArray response) {
                 ArrayList<Tweet> newTweets = Tweet.fromJsonArray(response);
                 tweetsAdapter.addAll(newTweets);
                 listIsExhausted = newTweets.size() == 0;
@@ -182,4 +185,15 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
             }
         });
     }
+
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        composeFragment.show(fm, "fragment_edit_name");
+    }
+
+    private void hideEditDialog() {
+        composeFragment.dismiss();
+    }
+
 }

@@ -27,7 +27,7 @@
         android:layout_alignTop="@+id/tvUsername"
         android:layout_margin="20dp"
         android:paddingLeft="5dp"
-        android:text="3m"
+        android:text="140"
         android:textColor="#8899a6" />
 
     <info.hoang8f.widget.FButton

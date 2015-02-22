@@ -1,6 +1,5 @@
 package com.codepath.apps.tweeter.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -105,27 +104,13 @@ public class ComposeFragment extends DialogFragment {
 
     private void SetupComposeFragHeader() {
         getDialog().setTitle("Compose Tweet");
-        int textViewId = getDialog().getContext().getResources().getIdentifier("android:id/title", null, null);
+        int textViewId = getDialog().getContext().getResources().getIdentifier(
+                "android:id/title",
+                null,
+                null);
         TextView tv = (TextView) getDialog().findViewById(textViewId);
         tv.setBackgroundColor(getResources().getColor(R.color.CornflowerBlue));
         tv.setTextColor(getResources().getColor(R.color.White));
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (TweetComposedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnComposedListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     static class ViewHolder {
