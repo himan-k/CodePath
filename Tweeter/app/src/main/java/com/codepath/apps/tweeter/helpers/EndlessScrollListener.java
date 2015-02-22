@@ -1,4 +1,4 @@
-package com.codepath.apps.tweeter;
+package com.codepath.apps.tweeter.helpers;
 
 import android.widget.AbsListView;
 

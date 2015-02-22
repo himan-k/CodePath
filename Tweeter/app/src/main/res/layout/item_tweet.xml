@@ -52,9 +52,11 @@
         android:layout_alignTop="@+id/ivProfileImage"
         android:layout_toLeftOf="@+id/tvPostTime"
         android:layout_toRightOf="@+id/tvUsername"
+        android:ellipsize="end"
         android:paddingLeft="5dp"
+        android:singleLine="true"
         android:textColor="#8899a6"
-        android:textSize="10sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvPostTime"
@@ -73,6 +75,8 @@
         android:layout_below="@+id/tvUsername"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:autoLink="all"
-        android:linksClickable="true" />
+        android:linksClickable="true"
+        android:textSize="18dp"
+        android:typeface="sans" />
 
 </RelativeLayout>

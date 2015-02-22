@@ -5,6 +5,15 @@
         <!-- Customize your theme here. -->
         <!-- colorPrimaryDark is used for the status bar -->
         <item name="colorPrimaryDark">@color/CornflowerBlue</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--We will be using the toolbar so no need to show ActionBar-->
+        <item name="android:windowActionBar">false</item>
     </style>
 
+    <style name="label_text_bold" parent="android:style/TextAppearance">
+        <item name="android:textColor">@color/CornflowerBlue</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+    </style>
 </resources>

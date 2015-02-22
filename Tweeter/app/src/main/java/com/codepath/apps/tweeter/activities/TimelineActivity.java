@@ -1,6 +1,7 @@
-package com.codepath.apps.tweeter;
+package com.codepath.apps.tweeter.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,22 +9,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.tweeter.R;
+import com.codepath.apps.tweeter.TweeterApplication;
+import com.codepath.apps.tweeter.TweeterClient;
 import com.codepath.apps.tweeter.adapters.TweetListAdapter;
+import com.codepath.apps.tweeter.fragments.ComposeFragment;
+import com.codepath.apps.tweeter.helpers.EndlessScrollListener;
 import com.codepath.apps.tweeter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TimelineActivity extends ActionBarActivity {
+public class TimelineActivity extends ActionBarActivity implements ComposeFragment.OnComposedListener {
     private ListView lvTweets;
     private ArrayList<Tweet> tweets;
     private TweeterClient client;
     private TweetListAdapter tweetsAdapter;
     private SwipeRefreshLayout swipeContainer;
     private Toolbar toolbar;
+    private ComposeFragment composeFragment;
 
     private boolean isFetchingTweets = false;
     private boolean listIsExhausted = false;
@@ -37,7 +44,7 @@ public class TimelineActivity extends ActionBarActivity {
         // Set a ToolBar to replace the ActionBar.
         setSupportActionBar(toolbar);
         //initialize tweet list
-        tweets = new ArrayList<Tweet>();
+        tweets = new ArrayList<>();
         tweetsAdapter = new TweetListAdapter(this, tweets);
 
         lvTweets = (ListView) findViewById(R.id.lvTweets);
@@ -45,7 +52,9 @@ public class TimelineActivity extends ActionBarActivity {
 
         client = TweeterApplication.getRestClient();
         fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, null);
-
+        if (savedInstanceState == null) {
+            composeFragment = ComposeFragment.newInstance();
+        }
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
@@ -75,11 +84,28 @@ public class TimelineActivity extends ActionBarActivity {
         });
     }
 
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        composeFragment.show(fm, "fragment_edit_name");
+    }
+
+    private void hideEditDialog() {
+        composeFragment.dismiss();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        final MenuItem composeItem = menu.findItem(R.id.action_compose);
+        composeItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showEditDialog();
+                return true;
+            }
+        });
         return true;
     }
 
@@ -128,6 +154,26 @@ public class TimelineActivity extends ActionBarActivity {
             private void endLoading() {
                 isFetchingTweets = false;
                 tweetsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void onComposed(String tweet) {
+        client.postStatus(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
+                Tweet newTweet = Tweet.fromJson(jsonObject);
+
+                if (tweetsAdapter != null)
+                    tweetsAdapter.insert(newTweet, 0);
+                tweetsAdapter.notifyDataSetChanged();
+                hideEditDialog();
             }
         });
     }

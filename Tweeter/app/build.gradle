@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.codepath.apps.restclienttemplate"
+        applicationId "com.codepath.apps.tweeter"
         minSdkVersion 16
         targetSdkVersion 21
     }
@@ -23,4 +23,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.0+'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.loopj.android:android-async-http:1.4.6'
+    compile 'com.sothree.slidinguppanel:library:3.0.0'
+    compile 'com.github.markushi:circlebutton:1.1'
+    compile 'info.hoang8f:fbutton:1.0.5'
 }

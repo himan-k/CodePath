@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.tweeter.R;
 import com.codepath.apps.tweeter.models.Tweet;
 import com.codepath.apps.tweeter.models.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -94,8 +94,12 @@ public class TweetListAdapter extends ArrayAdapter<Tweet> {
         long createdAtTime = createdAtDate.getTime();
         long timeNow = System.currentTimeMillis();
         if (createdAtTime < timeNow) {
-            viewHolder.tvPostTime.setText(DateUtils.getRelativeTimeSpanString(tweet.getCreatedAt().getTime(),
-                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString());
+            // set timestamp
+            String[] strSplit = ((String) DateUtils.getRelativeTimeSpanString(tweet.getCreatedAt().getTime(),
+                    System.currentTimeMillis(),
+                    DateUtils.SECOND_IN_MILLIS)
+            ).split("\\s+");
+            viewHolder.tvPostTime.setText(strSplit[0] + (strSplit[1]).charAt(0));
 
         } else {
             viewHolder.tvPostTime.setText("Now");
