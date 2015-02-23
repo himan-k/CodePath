@@ -30,6 +30,6 @@ The following user stories must be completed:
 
 Walkthrough of all user stories:
 
-![Alt text](/twitter.gif?raw=true "Video Walkthrough")
+![Alt text](/tweeter.gif?raw=true "Video Walkthrough")
 
 GIF created with LiceCap.
