@@ -1,34 +1,35 @@
 # CodePath
-Photo Search Client
+Twitter Client
 
-This is an Android Google search client demo application. 
+This is an Android Twitter client demo application. 
 
 User Stories:
-
 The following user stories must be completed:
 
-- [x] User can enter a search query that will display a grid of image results from the Google Image API.
-- [x] User can click on "settings" which allows selection of advanced search options to filter results
-- [x] User can configure advanced search filters such as:
-  - [x] Size (small, medium, large, extra-large)
-  - [x] Color filter (black, blue, brown, gray, green, etc...)
-  - [x] Type (faces, photo, clip art, line art)
-  - [x] Site (espn.com)
-- [x] Subsequent searches will have any filters applied to the search results
-- [x] User can tap on any image in results to see the image full-screen
-- [x] User can scroll down “infinitely” to continue loading more image results (up to 8 pages)
-The following advanced user stories are optional:
+- [x] User can sign in to Twitter using OAuth login
+- [x] User can view the tweets from their home timeline
+  - [x] User should be displayed the username, name, and body for each tweet
+  - [x] User should be displayed the relative timestamp for each tweet "8m", "7h"
+  - [x] User can view more tweets as they scroll with infinite pagination
+  - [x] Optional: Links in tweets are clickable and will launch the web browser (see autolink)
+- [x] User can compose a new tweet
+  - [x] User can click a “Compose” icon in the Action Bar on the top right
+  - [x] User can then enter a new tweet and post this to twitter
+  - [x] User is taken back to home timeline with new tweet visible in timeline
+  - [x] Optional: User can see a counter with total number of characters left for tweet
+  - [x] The following advanced user stories are optional:
 
-- [x] Advanced: Robust error handling, check if internet is available, handle error cases, network failures
-- [x] Advanced: Use the ActionBar SearchView or custom layout as the query box instead of an EditText
-- [ ] Advanced: User can share an image to their friends or email it to themselves
-- [x] Advanced: Replace Filter Settings Activity with a lightweight modal overlay
-- [x] Advanced: Improve the user interface and experiment with image assets and/or styling and coloring
-- [x] Bonus: Use the StaggeredGridView to display improve the grid of image results
-- [X] Bonus: User can zoom or pan images displayed in full-screen detail view (late checkin)
+- [x] Advanced: User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
+- [x] Advanced: User can open the twitter app offline and see last loaded tweets
+- [x] Tweets are persisted into sqlite and can be displayed from the local DB
+- [x] Advanced: User can tap a tweet to display a "detailed" view of that tweet
+- [x] Advanced: User can select "reply" from detail view to respond to a tweet
+- [x] Advanced: Improve the user interface and theme the app to feel "twitter branded"
+- [ ] Bonus: User can see embedded image media within the tweet detail view
+- [x] Bonus: Compose activity is replaced with a modal overlay
 
 Walkthrough of all user stories:
 
-![Alt text](/photohunt.gif?raw=true "Video Walkthrough")
+![Alt text](/twitter.gif?raw=true "Video Walkthrough")
 
 GIF created with LiceCap.
