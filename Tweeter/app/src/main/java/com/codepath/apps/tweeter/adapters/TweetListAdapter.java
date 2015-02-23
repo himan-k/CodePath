@@ -1,6 +1,7 @@
 package com.codepath.apps.tweeter.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -84,6 +85,19 @@ public class TweetListAdapter extends ArrayAdapter<Tweet> {
 
         // push fields appropriately
         viewHolder.tvBody.setText(Html.fromHtml(tweet.getBody()));
+        viewHolder.tvBody.setText(Html.fromHtml(tweet.getBody(), new Html.ImageGetter() {
+            @Override
+            public Drawable getDrawable(String source) {
+                Drawable drawFromPath;
+                int path =
+                        getContext().getResources().getIdentifier(source, "drawable",
+                                "com.package...");
+                drawFromPath = (Drawable) getContext().getResources().getDrawable(path);
+                drawFromPath.setBounds(0, 0, drawFromPath.getIntrinsicWidth(),
+                        drawFromPath.getIntrinsicHeight());
+                return drawFromPath;
+            }
+        }, null));
         viewHolder.tvUsername.setText(user.getName());
         viewHolder.tvScreenName.setText("@" + user.getScreenName());
         imageLoader.displayImage(user.getProfileImageUrl(), viewHolder.ivProfileImage);

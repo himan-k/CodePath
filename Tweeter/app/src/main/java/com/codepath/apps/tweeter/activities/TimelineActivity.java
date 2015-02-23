@@ -45,7 +45,7 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
         super.onCreate(savedInstanceState);
         SetupContentViews();
 
-        fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, null);
+        fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, false);
 
         if (savedInstanceState == null) {
             composeFragment = ComposeFragment.newInstance();
@@ -63,7 +63,7 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, null);
+                fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, true);
             }
         });
 
@@ -72,7 +72,7 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, null);
+                fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, false);
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
         });
@@ -128,18 +128,22 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
         return super.onOptionsItemSelected(item);
     }
 
-    protected void fetchHomeTweets(String method, Long userId) {
+    protected void fetchHomeTweets(String method, final boolean addFront) {
         if (isFetchingTweets) return;
         isFetchingTweets = true;
 
         Tweet lastTweet = null;
+        Tweet firstTweet = null;
         int numberOfTweets = tweets.size();
-        if (numberOfTweets > 0)
+        if (numberOfTweets > 0) {
+            firstTweet = tweets.get(0);
             lastTweet = tweets.get(tweets.size() - 1);
+        }
 
-        Long oldestId = (lastTweet != null) ? lastTweet.getTweetId() - 1 : null;
+        Long sinceId = (firstTweet != null) ? firstTweet.getTweetId() : null;
+        Long oldestId = (lastTweet != null && !addFront) ? lastTweet.getTweetId() : null;
 
-        client.getStatuses(method, userId, oldestId, new JsonHttpResponseHandler() {
+        client.getStatuses(method, sinceId, oldestId, new JsonHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers,
                                   String responseString,
@@ -153,7 +157,14 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
                                   Header[] headers,
                                   org.json.JSONArray response) {
                 ArrayList<Tweet> newTweets = Tweet.fromJsonArray(response);
-                tweetsAdapter.addAll(newTweets);
+                if (addFront) {
+                    for (Tweet tweet : newTweets) {
+                        tweetsAdapter.insert(tweet, 0);
+                    }
+                    swipeContainer.setRefreshing(false);
+                } else {
+                    tweetsAdapter.addAll(newTweets);
+                }
                 listIsExhausted = newTweets.size() == 0;
 
                 endLoading();

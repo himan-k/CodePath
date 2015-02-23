@@ -1,5 +1,8 @@
 package com.codepath.apps.tweeter.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -22,28 +25,44 @@ import java.util.Locale;
  * Created by Himanshu on 2/21/2015.
  */
 @Table(name = "tweets")
-public class Tweet extends Model {
+public class Tweet extends Model implements Parcelable {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel in) {
+            return new Tweet(in);
+        }
+
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
     static private SimpleDateFormat twitterDateFormatter = null;
-
     // Define table fields
     @Column(name = "body")
     private String body;
-
     @Column(name = "tweetId")
     private long tweetId;
-
     @Column(name = "createdAt")
     private Date createdAt;
-
     @Column(name = "user")
     private User user;
-
     @Column(name = "retweetedStatus")
     private Tweet retweetedStatus;
-
     public Tweet() {
         super();
+    }
+
+    protected Tweet(Parcel in) {
+        twitterDateFormatter = (SimpleDateFormat) in.readValue(SimpleDateFormat.class.getClassLoader());
+        body = in.readString();
+        tweetId = in.readLong();
+        long tmpCreatedAt = in.readLong();
+        createdAt = tmpCreatedAt != -1 ? new Date(tmpCreatedAt) : null;
+        user = (User) in.readValue(User.class.getClassLoader());
+        retweetedStatus = (Tweet) in.readValue(Tweet.class.getClassLoader());
     }
 
     public static Tweet fromJson(JSONObject object) {
@@ -118,6 +137,21 @@ public class Tweet extends Model {
                 .orderBy(orderBy)
                 .limit(count)
                 .execute();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(twitterDateFormatter);
+        dest.writeString(body);
+        dest.writeLong(tweetId);
+        dest.writeLong(createdAt != null ? createdAt.getTime() : -1L);
+        dest.writeValue(user);
+        dest.writeValue(retweetedStatus);
     }
 
     public String getBody() {
