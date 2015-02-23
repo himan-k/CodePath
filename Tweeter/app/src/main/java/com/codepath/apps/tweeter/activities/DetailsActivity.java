@@ -47,9 +47,9 @@ public class DetailsActivity extends ActionBarActivity implements TweetComposedL
 
     private String getReplyToUsers() {
         String Users = tvScreenName.getText().toString();
-        Matcher matcher = Pattern.compile("@").matcher(tvBody.getText().toString());
+        Matcher matcher = Pattern.compile("@\\p{L}+").matcher(tvBody.getText().toString());
         while (matcher.find()) {
-            Users += " " + matcher.group(1);
+            Users += " " + matcher.group();
         }
         return Users;
     }
