@@ -32,7 +32,7 @@ public class User extends Model implements Parcelable {
     };
     @Column(name = "name")
     private String name;
-    @Column(name = "userId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "userId", index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long userId;
     @Column(name = "screenName")
     private String screenName;

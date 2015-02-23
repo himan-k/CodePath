@@ -42,11 +42,11 @@ public class Tweet extends Model implements Parcelable {
     // Define table fields
     @Column(name = "body")
     private String body;
-    @Column(name = "tweetId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "tweetId", index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long tweetId;
     @Column(name = "createdAt")
     private Date createdAt;
-    @Column(name = "user")
+    @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
     @Column(name = "retweetedStatus")
     private Tweet retweetedStatus;
@@ -67,36 +67,51 @@ public class Tweet extends Model implements Parcelable {
     }
 
     public static Tweet findOrCreateFromJson(JSONObject object) {
-        Tweet tweet = new Tweet();
-
-        // create the SimpleDateFormat only once, on demand
-        if (twitterDateFormatter == null) {
-            String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-            twitterDateFormatter = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
-            twitterDateFormatter.setLenient(true);
-        }
-
+        Tweet existingTweet =
+                null;
         try {
-
-            tweet.body = object.getString("text");
-            tweet.tweetId = object.getLong("id");
-            tweet.createdAt = twitterDateFormatter.parse(object.getString("created_at"));
-            tweet.user = User.findOrCreateFromJson(object.getJSONObject("user"));
-
-            JSONObject retweetedStatus = object.optJSONObject("retweeted_status");
-            if (retweetedStatus != null)
-                tweet.retweetedStatus = Tweet.findOrCreateFromJson(retweetedStatus);
-
+            existingTweet = new Select().from(Tweet.class)
+                    .where("tweetId = ?", object.getLong("id")
+                    ).executeSingle();
         } catch (JSONException e) {
-            return null;
-        } catch (ParseException e) {
-            return null;
+            e.printStackTrace();
         }
-        // save to database
-        tweet.user.save();
-        tweet.save();
+        if (existingTweet != null) {
+            // found and return existing
+            return existingTweet;
+        } else {
+            Tweet tweet = new Tweet();
 
-        return tweet;
+            // create the SimpleDateFormat only once, on demand
+            if (twitterDateFormatter == null) {
+                String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+                twitterDateFormatter = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+                twitterDateFormatter.setLenient(true);
+            }
+
+            try {
+
+                tweet.body = object.getString("text");
+                tweet.tweetId = object.getLong("id");
+                tweet.createdAt = twitterDateFormatter.parse(object.getString("created_at"));
+                tweet.user = User.findOrCreateFromJson(object.getJSONObject("user"));
+
+                JSONObject retweetedStatus = object.optJSONObject("retweeted_status");
+                if (retweetedStatus != null)
+                    tweet.retweetedStatus = Tweet.findOrCreateFromJson(retweetedStatus);
+
+            } catch (JSONException e) {
+                return null;
+            } catch (ParseException e) {
+                return null;
+            }
+            // save to database
+            tweet.user.save();
+            tweet.save();
+
+            return tweet;
+        }
+
     }
 
     public static ArrayList<Tweet> fromJsonArray(JSONArray jsonArray) {
