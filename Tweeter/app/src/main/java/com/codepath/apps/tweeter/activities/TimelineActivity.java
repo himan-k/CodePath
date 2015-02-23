@@ -83,10 +83,22 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
                 Tweet curr_tweet = tweets.get(position);
                 Intent i = new Intent(TimelineActivity.this, DetailsActivity.class);
                 i.putExtra("tweet", curr_tweet);
-                startActivity(i);
+                startActivityForResult(i, 1);
             }
         });
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                onComposed(data.getStringExtra("reply"));
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
 
     private void SetupContentViews() {
         setContentView(R.layout.activity_timeline);
@@ -208,7 +220,8 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
     }
 
     private void hideEditDialog() {
-        composeFragment.dismiss();
+        if (null != composeFragment && composeFragment.isVisible()) {
+            composeFragment.dismiss();
+        }
     }
-
 }

@@ -1,5 +1,6 @@
 package com.codepath.apps.tweeter.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -26,7 +27,6 @@ public class DetailsActivity extends ActionBarActivity implements TweetComposedL
     ImageView ivStatus, ivProfileImage;
     TextView tvStatus, tvUsername, tvScreenName, tvBody, tvPostTime;
     private ComposeFragment replyFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +135,11 @@ public class DetailsActivity extends ActionBarActivity implements TweetComposedL
     }
 
     @Override
-    public void onComposed(String body) {
+    public void onComposed(String reply) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("reply", reply);
+        setResult(RESULT_OK, returnIntent);
         hideEditDialog();
+        finish();
     }
 }
