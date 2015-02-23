@@ -1,5 +1,6 @@
 package com.codepath.apps.tweeter.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -7,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,9 +40,6 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
     private Toolbar toolbar;
     private ComposeFragment composeFragment;
 
-    private boolean isFetchingTweets = false;
-    private boolean listIsExhausted = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,7 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
         fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, false);
 
         if (savedInstanceState == null) {
-            composeFragment = ComposeFragment.newInstance();
+            composeFragment = ComposeFragment.newInstance(null);
         }
         SetupListeners();
 
@@ -74,6 +74,16 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
                 // Add whatever code is needed to append new items to your AdapterView
                 fetchHomeTweets(TweeterClient.METHOD_HOME_TIMELINE, false);
                 // or customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
+
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Tweet curr_tweet = tweets.get(position);
+                Intent i = new Intent(TimelineActivity.this, DetailsActivity.class);
+                i.putExtra("tweet", curr_tweet);
+                startActivity(i);
             }
         });
     }
@@ -129,9 +139,6 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
     }
 
     protected void fetchHomeTweets(String method, final boolean addFront) {
-        if (isFetchingTweets) return;
-        isFetchingTweets = true;
-
         Tweet lastTweet = null;
         Tweet firstTweet = null;
         int numberOfTweets = tweets.size();
@@ -165,13 +172,10 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
                 } else {
                     tweetsAdapter.addAll(newTweets);
                 }
-                listIsExhausted = newTweets.size() == 0;
-
                 endLoading();
             }
 
             private void endLoading() {
-                isFetchingTweets = false;
                 tweetsAdapter.notifyDataSetChanged();
             }
         });
@@ -187,7 +191,7 @@ public class TimelineActivity extends ActionBarActivity implements TweetComposed
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
-                Tweet newTweet = Tweet.fromJson(jsonObject);
+                Tweet newTweet = Tweet.findOrCreateFromJson(jsonObject);
 
                 if (tweetsAdapter != null)
                     tweetsAdapter.insert(newTweet, 0);

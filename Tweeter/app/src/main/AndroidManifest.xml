@@ -17,7 +17,7 @@
         android:maxSdkVersion="18" />
 
     <application
-        android:name="com.codepath.apps.tweeter.TweeterApplication"
+        android:name=".TweeterApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -33,7 +33,7 @@
             android:value="com.codepath.apps.tweeter.models.Tweet, com.codepath.apps.tweeter.models.User" />
 
         <activity
-            android:name="com.codepath.apps.tweeter.activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -53,8 +53,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.codepath.apps.tweeter.activities.TimelineActivity"
+            android:name=".activities.TimelineActivity"
             android:label="@string/title_activity_timeline" />
+        <activity
+            android:name=".activities.DetailsActivity"
+            android:label="@string/title_activity_details"></activity>
     </application>
 
 </manifest>

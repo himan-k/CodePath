@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class User extends Model implements Parcelable {
     };
     @Column(name = "name")
     private String name;
-    @Column(name = "userId", unique = true)
+    @Column(name = "userId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long userId;
     @Column(name = "screenName")
     private String screenName;
@@ -58,24 +59,38 @@ public class User extends Model implements Parcelable {
         numFollowing = in.readInt();
     }
 
-    public static User fromJson(JSONObject jsonObject) {
-        User user = new User();
-
+    public static User findOrCreateFromJson(JSONObject jsonObject) {
+        User existingUser =
+                null;
         try {
-
-            user.name = jsonObject.getString("name");
-            user.userId = jsonObject.getLong("id");
-            user.screenName = jsonObject.getString("screen_name");
-            user.profileImageUrl = jsonObject.getString("profile_image_url");
-            user.tagLine = jsonObject.getString("description");
-            user.numFollowers = jsonObject.getInt("followers_count");
-            user.numFollowing = jsonObject.getInt("friends_count");
-
+            existingUser = new Select().from(User.class)
+                    .where("userId = ?", jsonObject.getLong("id")
+                    ).executeSingle();
         } catch (JSONException e) {
-            return null;
+            e.printStackTrace();
         }
-        user.save();
-        return user;
+        if (existingUser != null) {
+            // found and return existing
+            return existingUser;
+        } else {
+            User user = new User();
+
+            try {
+
+                user.name = jsonObject.getString("name");
+                user.userId = jsonObject.getLong("id");
+                user.screenName = jsonObject.getString("screen_name");
+                user.profileImageUrl = jsonObject.getString("profile_image_url");
+                user.tagLine = jsonObject.getString("description");
+                user.numFollowers = jsonObject.getInt("followers_count");
+                user.numFollowing = jsonObject.getInt("friends_count");
+
+            } catch (JSONException e) {
+                return null;
+            }
+            user.save();
+            return user;
+        }
     }
 
     @Override

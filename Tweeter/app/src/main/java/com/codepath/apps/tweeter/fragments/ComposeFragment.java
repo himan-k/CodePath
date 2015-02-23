@@ -1,5 +1,6 @@
 package com.codepath.apps.tweeter.fragments;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -19,20 +20,26 @@ import info.hoang8f.widget.FButton;
 public class ComposeFragment extends DialogFragment {
     private static final int TWEET_MAX_LENGTH = 140;
     private static ViewHolder viewHolder = null;
+    private static String replyUsers = null;
     private TweetComposedListener mListener;
 
     public ComposeFragment() {
         // Required empty public constructor
     }
 
-    public static ComposeFragment newInstance() {
+    public static ComposeFragment newInstance(String replyUsers) {
         ComposeFragment fragment = new ComposeFragment();
+        Bundle args = new Bundle();
+        args.putString("replyUsers", replyUsers);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Get back arguments
+        replyUsers = getArguments().getString("replyUsers", "");
     }
 
     @Override
@@ -56,6 +63,12 @@ public class ComposeFragment extends DialogFragment {
         viewHolder.tweetBtn = (FButton) view.findViewById(R.id.f_twitter_button);
         viewHolder.etBody = (EditText) view.findViewById(R.id.etBody);
         viewHolder.tvCharRemaining = (TextView) view.findViewById(R.id.tvCharRemaining);
+
+        if (null != replyUsers) {
+            viewHolder.etBody.setText(replyUsers);
+            viewHolder.etBody.setSelection(replyUsers.length());
+            viewHolder.tvCharRemaining.setText(replyUsers.length() + "");
+        }
     }
 
     private void SetupListeners() {
@@ -102,6 +115,22 @@ public class ComposeFragment extends DialogFragment {
         });
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (TweetComposedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
     private void SetupComposeFragHeader() {
         getDialog().setTitle("Compose Tweet");
         int textViewId = getDialog().getContext().getResources().getIdentifier(

@@ -13,5 +13,6 @@
     <string name="action_compose">Compose</string>
     <string name="tweet_hint">Tweet away!</string>
     <string name="tweet">Tweet!</string>
+    <string name="title_activity_details">DetailsActivity</string>
 
 </resources>

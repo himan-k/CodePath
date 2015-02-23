@@ -26,7 +26,6 @@ import java.util.Locale;
  */
 @Table(name = "tweets")
 public class Tweet extends Model implements Parcelable {
-
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
         @Override
@@ -43,7 +42,7 @@ public class Tweet extends Model implements Parcelable {
     // Define table fields
     @Column(name = "body")
     private String body;
-    @Column(name = "tweetId")
+    @Column(name = "tweetId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long tweetId;
     @Column(name = "createdAt")
     private Date createdAt;
@@ -51,6 +50,8 @@ public class Tweet extends Model implements Parcelable {
     private User user;
     @Column(name = "retweetedStatus")
     private Tweet retweetedStatus;
+
+
     public Tweet() {
         super();
     }
@@ -65,7 +66,7 @@ public class Tweet extends Model implements Parcelable {
         retweetedStatus = (Tweet) in.readValue(Tweet.class.getClassLoader());
     }
 
-    public static Tweet fromJson(JSONObject object) {
+    public static Tweet findOrCreateFromJson(JSONObject object) {
         Tweet tweet = new Tweet();
 
         // create the SimpleDateFormat only once, on demand
@@ -80,11 +81,11 @@ public class Tweet extends Model implements Parcelable {
             tweet.body = object.getString("text");
             tweet.tweetId = object.getLong("id");
             tweet.createdAt = twitterDateFormatter.parse(object.getString("created_at"));
-            tweet.user = User.fromJson(object.getJSONObject("user"));
+            tweet.user = User.findOrCreateFromJson(object.getJSONObject("user"));
 
             JSONObject retweetedStatus = object.optJSONObject("retweeted_status");
             if (retweetedStatus != null)
-                tweet.retweetedStatus = Tweet.fromJson(retweetedStatus);
+                tweet.retweetedStatus = Tweet.findOrCreateFromJson(retweetedStatus);
 
         } catch (JSONException e) {
             return null;
@@ -115,7 +116,7 @@ public class Tweet extends Model implements Parcelable {
                     continue;
                 }
 
-                Tweet tweet = Tweet.fromJson(tweetJson);
+                Tweet tweet = Tweet.findOrCreateFromJson(tweetJson);
                 if (tweet != null) {
                     tweets.add(tweet);
                 }
